@@ -21,19 +21,15 @@
   --blue: #185FA5;
   --teal: #2A9D8F;
   --amber: #B5830A;
+  --swim: #0077B6;
   --radius: 12px;
   --radius-sm: 8px;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0d1117;
-    --surface: #161b22;
-    --surface2: #21262d;
-    --text: #e6edf3;
-    --text2: #8b949e;
-    --text3: #6e7681;
-    --border: rgba(255,255,255,0.08);
-    --border2: rgba(255,255,255,0.14);
+    --bg: #0d1117; --surface: #161b22; --surface2: #21262d;
+    --text: #e6edf3; --text2: #8b949e; --text3: #6e7681;
+    --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.14);
   }
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -51,11 +47,27 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 @media (prefers-color-scheme: dark) { .tomorrow-banner { background: #0C2440; border-color: #185FA5; } }
 .tomorrow-banner .tb-label { font-size: 12px; font-weight: 600; color: var(--blue); margin-bottom: 6px; }
 .tomorrow-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.tomorrow-tag { font-size: 12px; background: var(--surface); border: 1px solid #B5D4F4; border-radius: 20px; padding: 3px 10px; color: var(--blue); }
+.tomorrow-tag { font-size: 12px; background: var(--surface); border: 1px solid #B5D4F4; border-radius: 20px; padding: 3px 10px; color: var(--blue); display: flex; align-items: center; gap: 4px; }
 
-.date-nav { display: flex; align-items: center; gap: 8px; padding: 12px 16px 0; }
-.date-nav button { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius-sm); padding: 7px 12px; cursor: pointer; color: var(--text2); font-size: 15px; }
-.date-nav .date-label { flex: 1; text-align: center; font-size: 14px; font-weight: 500; color: var(--text); }
+/* CALENDAR */
+.cal-wrap { padding: 12px 16px 0; }
+.cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.cal-header button { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius-sm); padding: 6px 12px; cursor: pointer; color: var(--text2); font-size: 15px; }
+.cal-month { font-size: 15px; font-weight: 600; color: var(--text); }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+.cal-dow { font-size: 10px; font-weight: 600; color: var(--text3); text-align: center; padding: 4px 0; text-transform: uppercase; }
+.cal-day { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: var(--radius-sm); cursor: pointer; border: 1px solid transparent; position: relative; transition: background .1s; gap: 2px; }
+.cal-day:hover { background: var(--surface2); }
+.cal-day.active { background: var(--red); border-color: var(--red); }
+.cal-day.active .cal-day-num { color: #fff; }
+.cal-day.today-marker { border-color: var(--red); }
+.cal-day.today-marker .cal-day-num { color: var(--red); font-weight: 700; }
+.cal-day.active.today-marker .cal-day-num { color: #fff; }
+.cal-day.other-month { opacity: 0.3; cursor: default; }
+.cal-day.no-plan { cursor: default; }
+.cal-day-num { font-size: 13px; color: var(--text); line-height: 1; }
+.cal-dots { display: flex; gap: 2px; flex-wrap: wrap; justify-content: center; }
+.cal-dot { width: 4px; height: 4px; border-radius: 50%; }
 
 .section { padding: 12px 16px 0; }
 .day-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
@@ -65,7 +77,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .badge-hoje { background: var(--red); color: #fff; }
 .badge-amanha { background: var(--blue); color: #fff; }
 .badge-fase { background: var(--surface2); color: var(--text2); }
-
 .phase-chip { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 20px; margin-bottom: 10px; font-weight: 500; }
 
 .treino-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden; }
@@ -76,10 +87,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .treino-meta .name { font-size: 14px; font-weight: 600; color: var(--text); margin-top: 1px; }
 .chevron { font-size: 16px; color: var(--text3); transition: transform .2s; }
 .chevron.open { transform: rotate(180deg); }
-
 .treino-body { border-top: 1px solid var(--border); padding: 12px 14px 14px; }
 .detail-line { font-size: 13px; color: var(--text2); line-height: 1.7; }
-
 .ex-table { width: 100%; border-collapse: collapse; margin-top: 4px; }
 .ex-table th { font-size: 11px; font-weight: 600; color: var(--text3); text-align: left; padding: 5px 0; border-bottom: 1px solid var(--border); }
 .ex-table th:last-child { text-align: right; }
@@ -90,16 +99,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .ex-sets { font-size: 11px; color: var(--text2); margin-top: 2px; }
 .alert-box { font-size: 11px; margin-top: 5px; padding: 5px 8px; border-radius: 6px; background: #FFF8E1; color: #7B5800; border-left: 3px solid #F59E0B; }
 @media (prefers-color-scheme: dark) { .alert-box { background: #2D2000; color: #F59E0B; } }
-
 .rest-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-align: center; color: var(--text3); font-size: 14px; margin-bottom: 10px; }
 .rest-card i { font-size: 24px; display: block; margin: 0 auto 8px; }
-
 .race-card { background: var(--red); border-radius: var(--radius); padding: 24px; text-align: center; margin-bottom: 10px; }
 .race-card i { font-size: 36px; color: #fff; display: block; margin: 0 auto 10px; }
 .race-card h3 { color: #fff; font-size: 18px; font-weight: 700; }
 .race-card p { color: rgba(255,255,255,0.85); font-size: 13px; margin-top: 6px; }
-
-.out-of-range { text-align: center; padding: 3rem 1rem; color: var(--text3); font-size: 14px; }
 </style>
 </head>
 <body>
@@ -114,13 +119,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     </div>
   </div>
   <div id="tomorrow-banner"></div>
-  <div id="date-nav-row" style="display:none">
-    <div class="date-nav">
-      <button onclick="changeDay(-1)"><i class="ti ti-chevron-left"></i></button>
-      <span class="date-label" id="nav-date-label"></span>
-      <button onclick="changeDay(1)"><i class="ti ti-chevron-right"></i></button>
-    </div>
-  </div>
+  <div id="cal-container" style="display:none"></div>
   <div class="section" id="content-area"></div>
 </div>
 
@@ -159,42 +158,10 @@ const RUN_THU={1:"12' Z1 + 6×1 km @4:10 + 10' Z1",2:"10' Z1 + 5×1,5 km @4:10 +
 const RUN_SUN={1:"20 km Z2",2:"18 km leve",3:"21 km confortável",4:"16 km regenerativo",5:"18 km leve",6:"16 km",7:"16 km Z2 confortável",8:"14 km leve",9:"12 km leve",10:"14 km leve",11:"12 km leve",12:"10 km leve",13:"8 km leve",14:"6 km leve"};
 
 const GYM_INF={
-  1:{titulo:"Inferior + Core – Base de Força",exercicios:[
-    ["Agachamento livre","4×8 (70% 1RM)","2'00''",null],
-    ["Leg Press 45°","4×10 (excêntrico 3'')","1'30''",null],
-    ["Leg Curl (mesa flexora)","3×12 (excêntrico 3'')","1'30''","Substituto do stiff – isquiotibiais em contração, sem alongamento excessivo. Ideal para fibrose na posterior."],
-    ["Afundo passada longa","3×10/perna","1'30''",null],
-    ["Hip Thrust","4×10 (iso 2'' topo)","1'30''",null],
-    ["Panturrilha em pé","4×15 (iso 2'' topo)","1'00''",null],
-    ["Prancha frontal","4×45''","0'45''",null],
-    ["Dead bug","3×12 alt.","0'45''",null]
-  ]},
-  2:{titulo:"Inferior + Potência – Força-Velocidade",exercicios:[
-    ["Agachamento pesado","5×5 (80-85% 1RM)","2'30''",null],
-    ["Leg Press explosivo","4×8","2'00''",null],
-    ["Leg Curl pesado + Ext. quadril cabo","LC: 4×8 | Ext: 3×12/perna","1'30''","Par substituto do stiff pesado – leg curl cobre posterior sem tensão no tendão; extensão no cabo isola o glúteo."],
-    ["Afundo step lunge","3×8/perna","1'30''",null],
-    ["Squat jump","3×8","1'30''",null],
-    ["Panturrilha sentado (sóleo)","4×15","1'00''",null],
-    ["Prancha + toque de ombro","4×20 alt.","0'45''",null]
-  ]},
-  3:{titulo:"Inferior Específico – Potência + Resistência",exercicios:[
-    ["Agachamento (força máx)","4×4 (85-90% 1RM)","3'00''",null],
-    ["Agachamento metabólico","3×15 (50% 1RM rápido)","1'30''",null],
-    ["Extensão quadril no cabo (kickback)","4×12/perna (explosivo)","1'30''","Substituto do stiff específico – trabalha glúteo + posterior distal sem amplitude de risco para a fibrose."],
-    ["Afundo com barra","4×8/perna","1'30''",null],
-    ["A-skip / corrida estacionária","3×20m","1'00''",null],
-    ["Panturrilha explosiva","4×12","1'00''",null],
-    ["Prancha + alcance diagonal","4×12 alt.","0'45''",null]
-  ]},
-  4:{titulo:"Inferior Taper – Manutenção",exercicios:[
-    ["Agachamento livre","3×5 (80% 1RM)","2'00''",null],
-    ["Leg Press","3×8 (leve)","1'30''",null],
-    ["Leg Curl (mesa flexora)","3×8 (leve, manutenção)","1'30''","Taper: manter estímulo dos isquiotibiais sem gerar tensão. Carga confortável."],
-    ["Box jump leve","3×4","2'00''",null],
-    ["Panturrilha em pé","3×12","1'00''",null],
-    ["Prancha frontal","3×40''","0'45''",null]
-  ]}
+  1:{titulo:"Inferior + Core – Base de Força",exercicios:[["Agachamento livre","4×8 (70% 1RM)","2'00''",null],["Leg Press 45°","4×10 (excêntrico 3'')","1'30''",null],["Leg Curl (mesa flexora)","3×12 (excêntrico 3'')","1'30''","Substituto do stiff – isquiotibiais em contração, sem alongamento excessivo."],["Afundo passada longa","3×10/perna","1'30''",null],["Hip Thrust","4×10 (iso 2'' topo)","1'30''",null],["Panturrilha em pé","4×15 (iso 2'' topo)","1'00''",null],["Prancha frontal","4×45''","0'45''",null],["Dead bug","3×12 alt.","0'45''",null]]},
+  2:{titulo:"Inferior + Potência – Força-Velocidade",exercicios:[["Agachamento pesado","5×5 (80-85% 1RM)","2'30''",null],["Leg Press explosivo","4×8","2'00''",null],["Leg Curl pesado + Ext. quadril cabo","LC: 4×8 | Ext: 3×12/perna","1'30''","Par substituto do stiff pesado – posterior sem tensão no tendão."],["Afundo step lunge","3×8/perna","1'30''",null],["Squat jump","3×8","1'30''",null],["Panturrilha sentado (sóleo)","4×15","1'00''",null],["Prancha + toque de ombro","4×20 alt.","0'45''",null]]},
+  3:{titulo:"Inferior Específico – Potência + Resistência",exercicios:[["Agachamento (força máx)","4×4 (85-90% 1RM)","3'00''",null],["Agachamento metabólico","3×15 (50% 1RM rápido)","1'30''",null],["Extensão quadril no cabo (kickback)","4×12/perna (explosivo)","1'30''","Substituto do stiff específico – glúteo + posterior distal sem risco à fibrose."],["Afundo com barra","4×8/perna","1'30''",null],["A-skip / corrida estacionária","3×20m","1'00''",null],["Panturrilha explosiva","4×12","1'00''",null],["Prancha + alcance diagonal","4×12 alt.","0'45''",null]]},
+  4:{titulo:"Inferior Taper – Manutenção",exercicios:[["Agachamento livre","3×5 (80% 1RM)","2'00''",null],["Leg Press","3×8 (leve)","1'30''",null],["Leg Curl (mesa flexora)","3×8 (leve, manutenção)","1'30''","Taper: manter estímulo sem tensão."],["Box jump leve","3×4","2'00''",null],["Panturrilha em pé","3×12","1'00''",null],["Prancha frontal","3×40''","0'45''",null]]}
 };
 const GYM_SUP={
   1:{titulo:"Superior + Core – Base de Força",exercicios:[["Puxada frontal (Pulldown)","4×10","1'30''",null],["Remada curvada barra","4×8","1'30''",null],["Supino reto halteres","3×10","1'30''",null],["Desenvolvimento halteres","3×10","1'30''",null],["Face pull corda","3×15","1'00''",null],["Rosca direta barra","3×12","1'00''",null],["Tríceps corda polia","3×12","1'00''",null],["Prancha lateral","3×40''/lado","0'45''",null],["Rotação russa med. ball","3×15 alt.","0'45''",null]]},
@@ -207,12 +174,28 @@ function gymIdx(s){return s<=4?1:s<=8?2:s<=12?3:4;}
 function dd(a,b){return Math.round((b-a)/86400000);}
 function getSem(d){const x=dd(PLAN_START,d);if(x<0)return null;return Math.floor(x/7)+1;}
 
+// Returns list of activity types for a given date (for calendar dots)
+function getActivityTypes(date) {
+  if(date<PLAN_START||date>PLAN_END) return [];
+  const sem=getSem(date); if(!sem||sem>14) return [];
+  const dow=date.getDay(), types=[];
+  if(dow===0) types.push('corrida');
+  if(dow===1){types.push('natacao');types.push('bike');types.push('pilates');}
+  if(dow===2){types.push('spinning');types.push('academia');types.push('corrida');}
+  if(dow===3){types.push('natacao');types.push('academia');}
+  if(dow===4){types.push('corrida');types.push('spinning');}
+  if(dow===5){types.push('natacao');types.push('bike');types.push('academia');}
+  if(dow===6) types.push('bike');
+  if(date.getDate()===20&&date.getMonth()===8&&date.getFullYear()===2026) return ['prova'];
+  return types;
+}
+
 function getDay(date){
-  if(date<PLAN_START||date>PLAN_END)return null;
-  const sem=getSem(date);if(!sem||sem>14)return null;
+  if(date<PLAN_START||date>PLAN_END) return null;
+  const sem=getSem(date); if(!sem||sem>14) return null;
   const dow=date.getDay(),phase=getPhase(sem),gi=gymIdx(sem),tr=[];
   if(dow===0){
-    if(date.getDate()===20&&date.getMonth()===8&&date.getFullYear()===2026)return{prova:true,sem,phase};
+    if(date.getDate()===20&&date.getMonth()===8&&date.getFullYear()===2026) return{prova:true,sem,phase};
     tr.push({tipo:'corrida',hora:'manhã',label:'Corrida – Longa',det:RUN_SUN[sem]});
   }
   if(dow===1){tr.push({tipo:'natacao',hora:'06:15',label:'Natação – Série Principal',det:SWIM[sem][0]});tr.push({tipo:'bike',hora:'12:00',label:'Bike Rua – Segunda',det:BIKE_MON[sem]});tr.push({tipo:'pilates',hora:'19:00',label:'Pilates',det:'Mobilidade e postura'});}
@@ -220,24 +203,32 @@ function getDay(date){
   if(dow===3){tr.push({tipo:'natacao',hora:'06:15',label:'Natação – Série Principal',det:SWIM[sem][1]});tr.push({tipo:'academia',hora:'19:00',label:'Academia – '+GYM_INF[gi].titulo,det:null,exs:GYM_INF[gi].exercicios});}
   if(dow===4){tr.push({tipo:'corrida',hora:'06:00',label:'Corrida – Quinta (Rua)',det:RUN_THU[sem]});tr.push({tipo:'spinning',hora:'19:00',label:'Spinning',det:'Bike indoor'});}
   if(dow===5){tr.push({tipo:'natacao',hora:'06:15',label:'Natação – Série Principal',det:SWIM[sem][2]});tr.push({tipo:'bike',hora:'12:00',label:'Bike Rua – 29km',det:BIKE_FRI[sem]});tr.push({tipo:'academia',hora:'19:00',label:'Academia – '+GYM_SUP[gi].titulo,det:null,exs:GYM_SUP[gi].exercicios});}
-  if(dow===6){tr.push({tipo:'bike',hora:'manhã',label:'Bike – Longa',det:BIKE_SAT[sem]});}
+  if(dow===6) tr.push({tipo:'bike',hora:'manhã',label:'Bike – Longa',det:BIKE_SAT[sem]});
   return{tr,sem,phase};
 }
 
 const TI={
-  natacao:{i:'ti-swim',bg:'#E6F1FB',c:'#185FA5'},
+  natacao:{i:'ti-swim',bg:'#E6F1FB',c:'#0077B6'},
   bike:{i:'ti-bike',bg:'#FAEEDA',c:'#854F0B'},
   corrida:{i:'ti-run',bg:'#EAF3DE',c:'#3B6D11'},
   academia:{i:'ti-barbell',bg:'#EEEDFE',c:'#534AB7'},
   spinning:{i:'ti-bike',bg:'#FFF0E6',c:'#993C1D'},
   pilates:{i:'ti-heart',bg:'#FBEAF0',c:'#993556'},
 };
+const DOT_COLOR={
+  natacao:'#0077B6', bike:'#854F0B', corrida:'#3B6D11',
+  academia:'#534AB7', spinning:'#993C1D', pilates:'#993556', prova:'#E63946'
+};
 
-let view='hoje',navD=new Date(),exp={};
+let view='hoje', navD=new Date(), calYear=2026, calMonth=5, exp={};
+
 function today(){const d=new Date();d.setHours(0,0,0,0);return d;}
 function tomorrow(){const d=today();d.setDate(d.getDate()+1);return d;}
+function sameDay(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate();}
 const DAYS=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+const MONTHS_LONG=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 const MONTHS=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const DOWS=['D','S','T','Q','Q','S','S'];
 function fmt(d){return DAYS[d.getDay()]+', '+d.getDate()+' de '+MONTHS[d.getMonth()];}
 function fmts(d){return d.getDate().toString().padStart(2,'0')+'/'+(d.getMonth()+1).toString().padStart(2,'0');}
 
@@ -257,9 +248,7 @@ function buildDay(date,bl,bc){
       h+=`<div class="treino-body">`;
       if(t.exs){
         h+=`<table class="ex-table"><thead><tr><th>#</th><th>Exercício</th><th>Desc.</th></tr></thead><tbody>`;
-        t.exs.forEach((ex,ei)=>{
-          h+=`<tr><td>${ei+1}</td><td><div class="ex-name">${ex[0]}</div><div class="ex-sets">${ex[1]}</div>${ex[3]?`<div class="alert-box">⚠️ ${ex[3]}</div>`:''}</td><td>${ex[2]}</td></tr>`;
-        });
+        t.exs.forEach((ex,ei)=>{h+=`<tr><td>${ei+1}</td><td><div class="ex-name">${ex[0]}</div><div class="ex-sets">${ex[1]}</div>${ex[3]?`<div class="alert-box">⚠️ ${ex[3]}</div>`:''}</td><td>${ex[2]}</td></tr>`;});
         h+=`</tbody></table>`;
       } else if(t.det){
         t.det.split('\n').forEach(l=>{h+=`<p class="detail-line">${l}</p>`;});
@@ -274,20 +263,93 @@ function buildDay(date,bl,bc){
 function buildTomorrow(){
   const tom=tomorrow(),data=getDay(tom);
   if(!data||!data.tr||!data.tr.length||view!=='hoje'){document.getElementById('tomorrow-banner').innerHTML='';return;}
-  const tags=data.tr.map(t=>`<span class="tomorrow-tag"><i class="ti ${(TI[t.tipo]||{i:'ti-run'}).i}" style="font-size:12px;vertical-align:-1px"></i> ${t.hora} ${t.tipo}</span>`).join('');
+  const tags=data.tr.map(t=>`<span class="tomorrow-tag"><i class="ti ${(TI[t.tipo]||{i:'ti-run'}).i}" style="font-size:12px;color:${(TI[t.tipo]||{c:'#185FA5'}).c}"></i>${t.tipo}</span>`).join('');
   document.getElementById('tomorrow-banner').innerHTML=`<div class="tomorrow-banner"><div class="tb-label"><i class="ti ti-calendar-event" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i>Amanhã (${fmts(tom)})</div><div class="tomorrow-tags">${tags}</div></div>`;
 }
 
+function buildCalendar(){
+  const firstDay=new Date(calYear,calMonth,1);
+  const lastDay=new Date(calYear,calMonth+1,0);
+  const startDow=firstDay.getDay();
+  const td=today();
+
+  let h=`<div class="cal-wrap">`;
+  h+=`<div class="cal-header">`;
+  h+=`<button onclick="calPrev()"><i class="ti ti-chevron-left"></i></button>`;
+  h+=`<span class="cal-month">${MONTHS_LONG[calMonth]} ${calYear}</span>`;
+  h+=`<button onclick="calNext()"><i class="ti ti-chevron-right"></i></button>`;
+  h+=`</div>`;
+  h+=`<div class="cal-grid">`;
+  DOWS.forEach(d=>{h+=`<div class="cal-dow">${d}</div>`;});
+
+  // blanks before
+  for(let i=0;i<startDow;i++){
+    h+=`<div class="cal-day other-month"><span class="cal-day-num"></span></div>`;
+  }
+
+  for(let day=1;day<=lastDay.getDate();day++){
+    const d=new Date(calYear,calMonth,day);
+    const types=getActivityTypes(d);
+    const isToday=sameDay(d,td);
+    const isSelected=sameDay(d,navD)&&view==='navegar';
+    const inPlan=d>=PLAN_START&&d<=PLAN_END;
+    let cls='cal-day';
+    if(isSelected) cls+=' active';
+    if(isToday&&!isSelected) cls+=' today-marker';
+    if(!inPlan) cls+=' no-plan';
+
+    const dots=types.slice(0,4).map(t=>`<div class="cal-dot" style="background:${isSelected?'rgba(255,255,255,0.8)':DOT_COLOR[t]||'#999'}"></div>`).join('');
+
+    h+=`<div class="${cls}" onclick="${inPlan?`pickDay(${calYear},${calMonth},${day})`:''}">`;
+    h+=`<span class="cal-day-num">${day}</span>`;
+    if(dots) h+=`<div class="cal-dots">${dots}</div>`;
+    h+=`</div>`;
+  }
+
+  // fill remaining
+  const total=startDow+lastDay.getDate();
+  const remainder=total%7;
+  if(remainder>0){for(let i=0;i<7-remainder;i++) h+=`<div class="cal-day other-month"></div>`;}
+  h+=`</div></div>`;
+  return h;
+}
+
+function pickDay(y,m,day){
+  navD=new Date(y,m,day);
+  exp={};
+  document.getElementById('cal-container').innerHTML=buildCalendar();
+  document.getElementById('content-area').innerHTML=buildDay(navD,'','badge-fase');
+}
+function calPrev(){if(calMonth===0){calMonth=11;calYear--;}else calMonth--;document.getElementById('cal-container').innerHTML=buildCalendar();}
+function calNext(){if(calMonth===11){calMonth=0;calYear++;}else calMonth++;document.getElementById('cal-container').innerHTML=buildCalendar();}
+
 function render(){
-  const area=document.getElementById('content-area'),title=document.getElementById('top-title'),dn=document.getElementById('date-nav-row');
+  const area=document.getElementById('content-area'),title=document.getElementById('top-title');
+  const cal=document.getElementById('cal-container');
   ['hoje','amanha','navegar'].forEach(v=>document.getElementById('btn-'+v).classList.toggle('active',view===v));
   document.getElementById('tomorrow-banner').innerHTML='';
-  if(view==='hoje'){title.textContent='Hoje';dn.style.display='none';area.innerHTML=buildDay(today(),'Hoje','badge-hoje');buildTomorrow();}
-  else if(view==='amanha'){title.textContent='Amanhã';dn.style.display='none';area.innerHTML=buildDay(tomorrow(),'Amanhã','badge-amanha');}
-  else{title.textContent='Calendário';dn.style.display='block';document.getElementById('nav-date-label').textContent=fmt(navD);const s=getSem(navD);area.innerHTML=buildDay(navD,s?`Sem ${s}`:'','badge-fase');}
+  if(view==='hoje'){
+    title.textContent='Hoje';
+    cal.style.display='none';
+    area.innerHTML=buildDay(today(),'Hoje','badge-hoje');
+    buildTomorrow();
+  } else if(view==='amanha'){
+    title.textContent='Amanhã';
+    cal.style.display='none';
+    area.innerHTML=buildDay(tomorrow(),'Amanhã','badge-amanha');
+  } else {
+    title.textContent='Calendário';
+    cal.style.display='block';
+    calMonth=navD.getMonth(); calYear=navD.getFullYear();
+    cal.innerHTML=buildCalendar();
+    area.innerHTML=buildDay(navD,'','badge-fase');
+  }
 }
-function setView(v){view=v;if(v==='navegar')navD=today();exp={};render();}
-function changeDay(d){navD=new Date(navD.getTime()+d*86400000);exp={};render();}
+function setView(v){
+  view=v;
+  if(v==='navegar'){navD=today();calMonth=navD.getMonth();calYear=navD.getFullYear();}
+  exp={};render();
+}
 render();
 </script>
 </body>
