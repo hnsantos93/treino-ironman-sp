@@ -208,7 +208,7 @@ function getDay(date){
 }
 
 const TI={
-  natacao:{i:'ti-swim',bg:'#E6F1FB',c:'#0077B6'},
+  natacao:{i:'__swim__',bg:'#E6F1FB',c:'#0077B6'},
   bike:{i:'ti-bike',bg:'#FAEEDA',c:'#854F0B'},
   corrida:{i:'ti-run',bg:'#EAF3DE',c:'#3B6D11'},
   academia:{i:'ti-barbell',bg:'#EEEDFE',c:'#534AB7'},
@@ -263,7 +263,7 @@ function buildDay(date,bl,bc){
 function buildTomorrow(){
   const tom=tomorrow(),data=getDay(tom);
   if(!data||!data.tr||!data.tr.length||view!=='hoje'){document.getElementById('tomorrow-banner').innerHTML='';return;}
-  const tags=data.tr.map(t=>`<span class="tomorrow-tag"><i class="ti ${(TI[t.tipo]||{i:'ti-run'}).i}" style="font-size:12px;color:${(TI[t.tipo]||{c:'#185FA5'}).c}"></i>${t.tipo}</span>`).join('');
+  const tags=data.tr.map(t=>`<span class="tomorrow-tag" style="color:${(TI[t.tipo]||{c:'#185FA5'}).c}">${(TI[t.tipo]||{i:'ti-run'}).i==='__swim__'?'<svg width=\"13\" height=\"13\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-2px\"><circle cx=\"7\" cy=\"7\" r=\"2\"/><path d=\"M22 20a5 5 0 0 1-4-2 5 5 0 0 1-4 2 5 5 0 0 1-4-2 5 5 0 0 1-4 2\"/><path d=\"M12 20v-9l-3 3\"/><path d=\"M7 14l3-3 3-3 3 3\"/></svg>':`<i class=\"ti ${(TI[t.tipo]||{i:'ti-run'}).i}\" style=\"font-size:12px\"></i>`}${t.tipo}</span>`).join('');
   document.getElementById('tomorrow-banner').innerHTML=`<div class="tomorrow-banner"><div class="tb-label"><i class="ti ti-calendar-event" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i>Amanhã (${fmts(tom)})</div><div class="tomorrow-tags">${tags}</div></div>`;
 }
 
